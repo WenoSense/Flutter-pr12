@@ -19,6 +19,33 @@ class PaymentDTO {
     this.isPaid = false,
   });
 
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'amount': amount,
+      'nextPaymentDate': nextPaymentDate.millisecondsSinceEpoch,
+      'periodicity': periodicity.name,
+      'isPaid': isPaid ? 1 : 0,
+    };
+  }
+
+  factory PaymentDTO.fromMap(Map<String, dynamic> map) {
+    return PaymentDTO(
+      id: map['id'] as String,
+      name: map['name'] as String,
+      category: map['category'] as String,
+      amount: map['amount'] as double,
+      nextPaymentDate: DateTime.fromMillisecondsSinceEpoch(map['nextPaymentDate'] as int),
+      periodicity: PaymentPeriodicity.values.firstWhere(
+            (e) => e.name == map['periodicity'],
+      ),
+      isPaid: map['isPaid'] == 1,
+    );
+  }
+
   Payment toDomain() {
     return Payment(
       id: id,
@@ -42,4 +69,5 @@ class PaymentDTO {
       isPaid: payment.isPaid,
     );
   }
+
 }
