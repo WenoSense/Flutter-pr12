@@ -136,6 +136,26 @@ mixin _$PaymentsStore on _PaymentsStore, Store {
     return _$loadPaymentsAsyncAction.run(() => super.loadPayments());
   }
 
+  late final _$setCategoryAsyncAction = AsyncAction(
+    '_PaymentsStore.setCategory',
+    context: context,
+  );
+
+  @override
+  Future<void> setCategory(String category) {
+    return _$setCategoryAsyncAction.run(() => super.setCategory(category));
+  }
+
+  late final _$setSortAsyncAction = AsyncAction(
+    '_PaymentsStore.setSort',
+    context: context,
+  );
+
+  @override
+  Future<void> setSort(SortType sort) {
+    return _$setSortAsyncAction.run(() => super.setSort(sort));
+  }
+
   late final _$togglePaymentPaidAsyncAction = AsyncAction(
     '_PaymentsStore.togglePaymentPaid',
     context: context,
@@ -170,30 +190,6 @@ mixin _$PaymentsStore on _PaymentsStore, Store {
     );
     try {
       return super.setSearchQuery(query);
-    } finally {
-      _$_PaymentsStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setCategory(String category) {
-    final _$actionInfo = _$_PaymentsStoreActionController.startAction(
-      name: '_PaymentsStore.setCategory',
-    );
-    try {
-      return super.setCategory(category);
-    } finally {
-      _$_PaymentsStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setSort(SortType sort) {
-    final _$actionInfo = _$_PaymentsStoreActionController.startAction(
-      name: '_PaymentsStore.setSort',
-    );
-    try {
-      return super.setSort(sort);
     } finally {
       _$_PaymentsStoreActionController.endAction(_$actionInfo);
     }

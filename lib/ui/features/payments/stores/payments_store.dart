@@ -1,8 +1,12 @@
 import 'package:mobx/mobx.dart';
 import '../../../../domain/models/payment.dart';
-import '../../../../domain/usecases/delete_payment_usecase.dart';
-import '../../../../domain/usecases/get_all_payments_usecase.dart';
-import '../../../../domain/usecases/mark_payment_paid_usecase.dart';
+import '../../../../domain/usecases/payment/delete_payment_usecase.dart';
+import '../../../../domain/usecases/payment/get_all_payments_usecase.dart';
+import '../../../../domain/usecases/payment/mark_payment_paid_usecase.dart';
+import '../../../../domain/usecases/filters/get_selected_category_usecase.dart';
+import '../../../../domain/usecases/filters/save_selected_category_usecase.dart';
+import '../../../../domain/usecases/filters/get_selected_sort_usecase.dart';
+import '../../../../domain/usecases/filters/save_selected_sort_usecase.dart';
 
 part 'payments_store.g.dart';
 
@@ -12,13 +16,30 @@ abstract class _PaymentsStore with Store {
   final GetAllPaymentsUseCase _getAllPaymentsUseCase;
   final MarkPaymentPaidUseCase _markPaymentPaidUseCase;
   final DeletePaymentUseCase _deletePaymentUseCase;
+  final GetSelectedCategoryUseCase _getSelectedCategoryUseCase;
+  final SaveSelectedCategoryUseCase _saveSelectedCategoryUseCase;
+  final GetSelectedSortUseCase _getSelectedSortUseCase;
+  final SaveSelectedSortUseCase _saveSelectedSortUseCase;
 
   _PaymentsStore(
     this._getAllPaymentsUseCase,
     this._markPaymentPaidUseCase,
     this._deletePaymentUseCase,
+    this._getSelectedCategoryUseCase,
+    this._saveSelectedCategoryUseCase,
+    this._getSelectedSortUseCase,
+    this._saveSelectedSortUseCase,
   ) {
+    _initializePreferences();
     loadPayments();
+  }
+
+  Future<void> _initializePreferences() async {
+    final savedCategory = await _getSelectedCategoryUseCase.execute();
+    final savedSortString = await _getSelectedSortUseCase.execute();
+    
+    selectedCategory = savedCategory;
+    selectedSort = _sortTypeFromString(savedSortString);
   }
 
   final List<String> _categories = [
@@ -68,15 +89,28 @@ abstract class _PaymentsStore with Store {
   }
 
   @action
-  void setCategory(String category) {
+  Future<void> setCategory(String category) async {
     selectedCategory = category;
+    await _saveSelectedCategoryUseCase.execute(category);
     _applyFiltersAndSort();
   }
 
   @action
-  void setSort(SortType sort) {
+  Future<void> setSort(SortType sort) async {
     selectedSort = sort;
+    await _saveSelectedSortUseCase.execute(_sortTypeToString(sort));
     _applyFiltersAndSort();
+  }
+
+  String _sortTypeToString(SortType sortType) {
+    return sortType.name;
+  }
+
+  SortType _sortTypeFromString(String sortString) {
+    return SortType.values.firstWhere(
+      (e) => e.name == sortString,
+      orElse: () => SortType.byDate,
+    );
   }
 
   @action
