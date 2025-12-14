@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../data/datasources/payment_local_datasource.dart';
+import '../../../../domain/interfaces/payment_datasource.dart';
 import '../../../../domain/models/payment.dart';
-import '../../../../domain/usecases/add_payment_usecase.dart';
+import '../../../../domain/usecases/payment/add_payment_usecase.dart';
 import '../stores/add_payment_store.dart';
 
 class AddPaymentScreen extends StatelessWidget {
@@ -12,7 +12,7 @@ class AddPaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataSource = GetIt.I<PaymentLocalDataSource>();
+    final dataSource = GetIt.I<PaymentDataSource>();
     
     final addUseCase = AddPaymentUseCase(dataSource);
     
@@ -109,7 +109,7 @@ class AddPaymentScreen extends StatelessWidget {
                       : () async {
                           final success = await store.savePayment();
                           if (success && context.mounted) {
-                            context.go('/');
+                            context.go('/payments');
                           }
                         },
                   style: ElevatedButton.styleFrom(

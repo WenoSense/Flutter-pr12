@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../domain/models/payment.dart';
-import '../../../../domain/usecases/add_payment_usecase.dart';
+import '../../../../domain/usecases/payment/add_payment_usecase.dart';
 import 'payments_store.dart';
 
 part 'add_payment_store.g.dart';

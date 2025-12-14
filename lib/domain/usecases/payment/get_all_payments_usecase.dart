@@ -1,5 +1,5 @@
-import '../interfaces/payment_datasource.dart';
-import '../models/payment.dart';
+import '../../interfaces/payment_datasource.dart';
+import '../../models/payment.dart';
 
 class GetAllPaymentsUseCase {
   final PaymentDataSource _dataSource;

@@ -1,4 +1,4 @@
-import '../interfaces/payment_datasource.dart';
+import '../../interfaces/payment_datasource.dart';
 
 class DeletePaymentUseCase {
   final PaymentDataSource _dataSource;
